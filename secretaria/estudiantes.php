@@ -45,15 +45,19 @@ if ($busqueda !== "") {
 
     $sql = "SELECT
                 id_estudiante,
+                tipo_documento,
                 documento,
                 nombre_completo,
                 curso,
+                sede,
                 jornada,
                 estado
             FROM estudiantes
-            WHERE documento LIKE ?
+            WHERE tipo_documento LIKE ?
+               OR documento LIKE ?
                OR nombre_completo LIKE ?
                OR curso LIKE ?
+               OR sede LIKE ?
             ORDER BY nombre_completo ASC";
 
     $stmt = $conexion->prepare($sql);
@@ -61,7 +65,9 @@ if ($busqueda !== "") {
     $termino = "%" . $busqueda . "%";
 
     $stmt->bind_param(
-        "sss",
+        "sssss",
+        $termino,
+        $termino,
         $termino,
         $termino,
         $termino
@@ -75,9 +81,11 @@ if ($busqueda !== "") {
 
     $sql = "SELECT
                 id_estudiante,
+                tipo_documento,
                 documento,
                 nombre_completo,
                 curso,
+                sede,
                 jornada,
                 estado
             FROM estudiantes
@@ -521,9 +529,11 @@ if ($resultado_inactivos) {
 
                         <div class="card-body">
 
-                            <div class="d-flex
-                                        justify-content-between
-                                        align-items-center">
+                            <div
+                                class="d-flex
+                                       justify-content-between
+                                       align-items-center"
+                            >
 
                                 <div>
 
@@ -545,8 +555,7 @@ if ($resultado_inactivos) {
 
 
                                 <i
-                                    class="bi bi-people-fill
-                                           text-primary"
+                                    class="bi bi-people-fill text-primary"
                                     style="font-size: 35px;"
                                 ></i>
 
@@ -567,9 +576,11 @@ if ($resultado_inactivos) {
 
                         <div class="card-body">
 
-                            <div class="d-flex
-                                        justify-content-between
-                                        align-items-center">
+                            <div
+                                class="d-flex
+                                       justify-content-between
+                                       align-items-center"
+                            >
 
                                 <div>
 
@@ -591,8 +602,7 @@ if ($resultado_inactivos) {
 
 
                                 <i
-                                    class="bi bi-person-check-fill
-                                           text-success"
+                                    class="bi bi-person-check-fill text-success"
                                     style="font-size: 35px;"
                                 ></i>
 
@@ -613,9 +623,11 @@ if ($resultado_inactivos) {
 
                         <div class="card-body">
 
-                            <div class="d-flex
-                                        justify-content-between
-                                        align-items-center">
+                            <div
+                                class="d-flex
+                                       justify-content-between
+                                       align-items-center"
+                            >
 
                                 <div>
 
@@ -637,8 +649,7 @@ if ($resultado_inactivos) {
 
 
                                 <i
-                                    class="bi bi-person-x-fill
-                                           text-danger"
+                                    class="bi bi-person-x-fill text-danger"
                                     style="font-size: 35px;"
                                 ></i>
 
@@ -650,7 +661,6 @@ if ($resultado_inactivos) {
 
                 </div>
 
-
             </div>
 
 
@@ -661,7 +671,6 @@ if ($resultado_inactivos) {
             <div class="card shadow-sm border-0 mb-4">
 
                 <div class="card-body">
-
 
                     <form
                         method="GET"
@@ -688,7 +697,7 @@ if ($resultado_inactivos) {
                                     class="form-control"
                                     id="buscar"
                                     name="buscar"
-                                    placeholder="Documento, nombre o curso..."
+                                    placeholder="Tipo documento, documento, nombre, curso o sede..."
                                     value="<?php
                                         echo htmlspecialchars(
                                             $busqueda
@@ -701,29 +710,24 @@ if ($resultado_inactivos) {
 
                             <div class="col-md-3">
 
-                                <div class="d-grid gap-2">
-
+                                <div class="d-grid">
 
                                     <button
                                         type="submit"
                                         class="btn btn-primary"
                                     >
 
-                                        <i
-                                            class="bi bi-search"
-                                        ></i>
+                                        <i class="bi bi-search"></i>
 
                                         Buscar
 
                                     </button>
-
 
                                 </div>
 
                             </div>
 
                         </div>
-
 
                     </form>
 
@@ -769,7 +773,7 @@ if ($resultado_inactivos) {
 
 
             <!-- ==========================================
-                 TABLA DE ESTUDIANTES
+                 TABLA
             ========================================== -->
 
             <div class="card shadow-sm border-0">
@@ -814,6 +818,10 @@ if ($resultado_inactivos) {
                                         </th>
 
                                         <th>
+                                            Tipo documento
+                                        </th>
+
+                                        <th>
                                             Documento
                                         </th>
 
@@ -823,6 +831,10 @@ if ($resultado_inactivos) {
 
                                         <th>
                                             Curso
+                                        </th>
+
+                                        <th>
+                                            Sede
                                         </th>
 
                                         <th>
@@ -859,6 +871,23 @@ if ($resultado_inactivos) {
                                             echo $estudiante[
                                                 "id_estudiante"
                                             ];
+
+                                            ?>
+
+                                        </td>
+
+
+                                        <!-- TIPO DOCUMENTO -->
+
+                                        <td>
+
+                                            <?php
+
+                                            echo htmlspecialchars(
+                                                $estudiante[
+                                                    "tipo_documento"
+                                                ]
+                                            );
 
                                             ?>
 
@@ -926,6 +955,23 @@ if ($resultado_inactivos) {
                                         </td>
 
 
+                                        <!-- SEDE -->
+
+                                        <td>
+
+                                            <?php
+
+                                            echo htmlspecialchars(
+                                                $estudiante[
+                                                    "sede"
+                                                ]
+                                            );
+
+                                            ?>
+
+                                        </td>
+
+
                                         <!-- JORNADA -->
 
                                         <td>
@@ -981,7 +1027,15 @@ if ($resultado_inactivos) {
                                                         class="bi bi-x-circle"
                                                     ></i>
 
-                                                    Inactivo
+                                                    <?php
+
+                                                    echo htmlspecialchars(
+                                                        $estudiante[
+                                                            "estado"
+                                                        ]
+                                                    );
+
+                                                    ?>
 
                                                 </span>
 
@@ -1007,12 +1061,7 @@ if ($resultado_inactivos) {
                     <?php else: ?>
 
 
-                        <!-- ==========================================
-                             SIN RESULTADOS
-                        ========================================== -->
-
                         <div class="text-center py-5">
-
 
                             <i
                                 class="bi bi-person-x"

@@ -158,9 +158,11 @@ $sql = "SELECT
             s.estado,
 
             e.id_estudiante,
+            e.tipo_documento,
             e.nombre_completo,
             e.documento,
             e.curso,
+            e.sede,
             e.jornada
 
         FROM solicitudes s
@@ -183,11 +185,17 @@ $resultado = $conexion->query($sql);
 
 
 // ==========================================
-// CERRAR CONEXIÓN
+// VERIFICAR ERROR EN CONSULTA
 // ==========================================
 
-// No cerramos todavía porque PHP necesita
-// recorrer el resultado en la página.
+if (!$resultado) {
+
+    $mensaje =
+        "Ocurrió un error al consultar las solicitudes.";
+
+    $tipo_mensaje = "danger";
+
+}
 
 ?>
 
@@ -544,7 +552,8 @@ $resultado = $conexion->query($sql);
             <?php if ($mensaje !== ""): ?>
 
                 <div
-                    class="alert alert-<?php echo $tipo_mensaje; ?> alert-dismissible fade show"
+                    class="alert alert-<?php echo $tipo_mensaje; ?>
+                           alert-dismissible fade show"
                     role="alert"
                 >
 
@@ -588,7 +597,10 @@ $resultado = $conexion->query($sql);
                 <div class="card-body">
 
 
-                    <?php if ($resultado && $resultado->num_rows > 0): ?>
+                    <?php if (
+                        $resultado &&
+                        $resultado->num_rows > 0
+                    ): ?>
 
 
                         <div class="table-responsive">
@@ -618,6 +630,10 @@ $resultado = $conexion->query($sql);
 
                                         <th>
                                             Curso
+                                        </th>
+
+                                        <th>
+                                            Sede
                                         </th>
 
                                         <th>
@@ -657,7 +673,9 @@ $resultado = $conexion->query($sql);
                                     <tr>
 
 
-                                        <!-- ID -->
+                                        <!-- ==================================
+                                             ID
+                                        =================================== -->
 
                                         <td>
 
@@ -672,7 +690,9 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- NOMBRE -->
+                                        <!-- ==================================
+                                             NOMBRE
+                                        =================================== -->
 
                                         <td>
 
@@ -695,7 +715,9 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- DOCUMENTO -->
+                                        <!-- ==================================
+                                             DOCUMENTO
+                                        =================================== -->
 
                                         <td>
 
@@ -712,7 +734,9 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- CURSO -->
+                                        <!-- ==================================
+                                             CURSO
+                                        =================================== -->
 
                                         <td>
 
@@ -729,7 +753,28 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- JORNADA -->
+                                        <!-- ==================================
+                                             SEDE
+                                        =================================== -->
+
+                                        <td>
+
+                                            <?php
+
+                                            echo htmlspecialchars(
+                                                $solicitud[
+                                                    "sede"
+                                                ]
+                                            );
+
+                                            ?>
+
+                                        </td>
+
+
+                                        <!-- ==================================
+                                             JORNADA
+                                        =================================== -->
 
                                         <td>
 
@@ -746,7 +791,9 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- FECHA SOLICITUD -->
+                                        <!-- ==================================
+                                             FECHA SOLICITUD
+                                        =================================== -->
 
                                         <td>
 
@@ -780,7 +827,9 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- FECHA ENTREGA -->
+                                        <!-- ==================================
+                                             FECHA ENTREGA
+                                        =================================== -->
 
                                         <td>
 
@@ -814,10 +863,11 @@ $resultado = $conexion->query($sql);
                                         </td>
 
 
-                                        <!-- ESTADO -->
+                                        <!-- ==================================
+                                             ESTADO
+                                        =================================== -->
 
                                         <td>
-
 
                                             <?php
 
@@ -909,14 +959,14 @@ $resultado = $conexion->query($sql);
 
                                             <?php endif; ?>
 
-
                                         </td>
 
 
-                                        <!-- ACCIÓN -->
+                                        <!-- ==================================
+                                             ACCIÓN
+                                        =================================== -->
 
                                         <td>
-
 
                                             <?php
 
@@ -927,14 +977,14 @@ $resultado = $conexion->query($sql);
 
                                             ?>
 
-
                                                 <div
-                                                    class="d-flex
-                                                           gap-1"
+                                                    class="d-flex gap-1"
                                                 >
 
 
-                                                    <!-- ENTREGAR -->
+                                                    <!-- ==========================
+                                                         ENTREGAR
+                                                    =========================== -->
 
                                                     <form
                                                         method="POST"
@@ -981,7 +1031,9 @@ $resultado = $conexion->query($sql);
                                                     </form>
 
 
-                                                    <!-- RECHAZAR -->
+                                                    <!-- ==========================
+                                                         RECHAZAR
+                                                    =========================== -->
 
                                                     <form
                                                         method="POST"
@@ -1142,6 +1194,7 @@ $resultado = $conexion->query($sql);
 </body>
 
 </html>
+
 
 <?php
 
