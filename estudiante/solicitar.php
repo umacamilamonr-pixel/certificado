@@ -45,6 +45,7 @@ $sql = "SELECT
             documento,
             nombre_completo,
             curso,
+            sede,
             jornada,
             estado
         FROM estudiantes
@@ -133,8 +134,10 @@ if ($resultado_verificar->num_rows > 0) {
 
         <meta charset="UTF-8">
 
-        <meta name="viewport"
-              content="width=device-width, initial-scale=1.0">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
 
         <title>Solicitud en trámite</title>
 
@@ -184,10 +187,10 @@ if ($resultado_verificar->num_rows > 0) {
 
                     <div class="card shadow-sm">
 
-                        <div class="card-body p-4 text-center">
+                        <div class="card-body p-4">
 
 
-                            <div class="alert alert-warning">
+                            <div class="alert alert-warning text-center">
 
                                 <h4 class="alert-heading">
 
@@ -224,38 +227,157 @@ if ($resultado_verificar->num_rows > 0) {
                             </div>
 
 
+                            <!-- ==========================================
+                                 INFORMACIÓN DEL ESTUDIANTE
+                            ========================================== -->
+
+                            <div class="mt-4">
+
+                                <h5 class="mb-3">
+
+                                    Información del estudiante
+
+                                </h5>
+
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+
+                                        Número de documento
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?php
+                                            echo htmlspecialchars(
+                                                $estudiante["documento"]
+                                            );
+                                        ?>"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+
+                                        Curso
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?php
+                                            echo htmlspecialchars(
+                                                $estudiante["curso"]
+                                            );
+                                        ?>"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <!-- ==========================================
+                                     SEDE
+                                ========================================== -->
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+
+                                        Sede
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?php
+                                            echo htmlspecialchars(
+                                                $estudiante["sede"]
+                                            );
+                                        ?>"
+                                        readonly
+                                    >
+
+                                </div>
+
+
+                                <div class="mb-3">
+
+                                    <label class="form-label fw-bold">
+
+                                        Jornada
+
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?php
+                                            echo htmlspecialchars(
+                                                $estudiante["jornada"]
+                                            );
+                                        ?>"
+                                        readonly
+                                    >
+
+                                </div>
+
+                            </div>
+
+
                             <?php if (!empty($solicitud_existente["fecha_entrega"])): ?>
 
-                                <p class="mt-3">
-
-                                    Fecha disponible para reclamar:
+                                <div class="alert alert-info text-center mt-4">
 
                                     <strong>
+
+                                        Fecha disponible para reclamar:
+
+                                    </strong>
+
+                                    <br>
+
+                                    <span class="fs-4">
 
                                         <?php
                                         echo date(
                                             "d/m/Y",
                                             strtotime(
-                                                $solicitud_existente["fecha_entrega"]
+                                                $solicitud_existente[
+                                                    "fecha_entrega"
+                                                ]
                                             )
                                         );
                                         ?>
 
-                                    </strong>
+                                    </span>
 
-                                </p>
+                                </div>
 
                             <?php endif; ?>
 
 
-                            <a
-                                href="index.php"
-                                class="btn btn-primary mt-3"
-                            >
+                            <div class="text-center">
 
-                                Volver
+                                <a
+                                    href="index.php"
+                                    class="btn btn-primary mt-3"
+                                >
 
-                            </a>
+                                    Volver
+
+                                </a>
+
+                            </div>
 
                         </div>
 
@@ -313,7 +435,6 @@ while ($dias_habiles < 3) {
     // Avanzar un día
     $fecha_entrega->modify("+1 day");
 
-    // Obtener día de la semana
     // 1 = lunes
     // 7 = domingo
 
@@ -407,15 +528,19 @@ $conexion->close();
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         Solicitud de Certificado
     </title>
 
 
-    <!-- Bootstrap -->
+    <!-- ==========================================
+         BOOTSTRAP
+    ========================================== -->
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -423,7 +548,9 @@ $conexion->close();
     >
 
 
-    <!-- CSS propio -->
+    <!-- ==========================================
+         CSS PROPIO
+    ========================================== -->
 
     <link
         rel="stylesheet"
@@ -475,10 +602,10 @@ $conexion->close();
 
                 <div class="card shadow-sm">
 
-                    <div class="card-body p-4 text-center">
+                    <div class="card-body p-4">
 
 
-                        <div class="alert alert-success">
+                        <div class="alert alert-success text-center">
 
                             <h3>
 
@@ -489,11 +616,26 @@ $conexion->close();
                         </div>
 
 
-                        <p class="fs-5">
+                        <!-- ==========================================
+                             DATOS DEL ESTUDIANTE
+                        ========================================== -->
 
-                            Estudiante:
+                        <div class="mb-4">
 
-                            <strong>
+                            <h5 class="mb-3">
+
+                                Información del estudiante
+
+                            </h5>
+
+
+                            <p>
+
+                                <strong>
+
+                                    Estudiante:
+
+                                </strong>
 
                                 <?php
                                 echo htmlspecialchars(
@@ -501,16 +643,16 @@ $conexion->close();
                                 );
                                 ?>
 
-                            </strong>
-
-                        </p>
+                            </p>
 
 
-                        <p>
+                            <p>
 
-                            Documento:
+                                <strong>
 
-                            <strong>
+                                    Documento:
+
+                                </strong>
 
                                 <?php
                                 echo htmlspecialchars(
@@ -518,16 +660,16 @@ $conexion->close();
                                 );
                                 ?>
 
-                            </strong>
-
-                        </p>
+                            </p>
 
 
-                        <p>
+                            <p>
 
-                            Curso:
+                                <strong>
 
-                            <strong>
+                                    Curso:
+
+                                </strong>
 
                                 <?php
                                 echo htmlspecialchars(
@@ -535,15 +677,53 @@ $conexion->close();
                                 );
                                 ?>
 
-                            </strong>
+                            </p>
 
-                        </p>
+
+                            <!-- ==========================================
+                                 SEDE
+                            ========================================== -->
+
+                            <p>
+
+                                <strong>
+
+                                    Sede:
+
+                                </strong>
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $estudiante["sede"]
+                                );
+                                ?>
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+
+                                    Jornada:
+
+                                </strong>
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $estudiante["jornada"]
+                                );
+                                ?>
+
+                            </p>
+
+                        </div>
 
 
                         <hr>
 
 
-                        <p>
+                        <p class="text-center">
 
                             Su solicitud fue registrada
                             correctamente.
@@ -551,7 +731,11 @@ $conexion->close();
                         </p>
 
 
-                        <div class="alert alert-info">
+                        <!-- ==========================================
+                             FECHAS
+                        ========================================== -->
+
+                        <div class="alert alert-info text-center">
 
                             <strong>
 
@@ -562,7 +746,9 @@ $conexion->close();
                             <br>
 
                             <?php
-                            echo $fecha_solicitud->format("d/m/Y H:i");
+                            echo $fecha_solicitud->format(
+                                "d/m/Y H:i"
+                            );
                             ?>
 
 
@@ -581,16 +767,17 @@ $conexion->close();
                             <span class="fs-4">
 
                                 <?php
-                                echo $fecha_entrega->format("d/m/Y");
+                                echo $fecha_entrega->format(
+                                    "d/m/Y"
+                                );
                                 ?>
 
                             </span>
 
-
                         </div>
 
 
-                        <p class="text-muted">
+                        <p class="text-muted text-center">
 
                             Recuerde acercarse a Secretaría Académica
                             para reclamar su certificado.
@@ -598,14 +785,18 @@ $conexion->close();
                         </p>
 
 
-                        <a
-                            href="index.php"
-                            class="btn btn-primary"
-                        >
+                        <div class="text-center">
 
-                            Volver al inicio
+                            <a
+                                href="index.php"
+                                class="btn btn-primary"
+                            >
 
-                        </a>
+                                Volver al inicio
+
+                            </a>
+
+                        </div>
 
                     </div>
 
